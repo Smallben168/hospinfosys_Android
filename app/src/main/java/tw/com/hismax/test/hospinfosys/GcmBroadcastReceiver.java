@@ -46,7 +46,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
                 i.addCategory("android.intent.category.LAUNCHER");
 
                 GetClientRegistrationId.sendLocalNotification(context, NOTIFICATION_ID,
-                        R.drawable.ic_launcher, "HospInfoSys CGM通知", extras
+                        R.drawable.ic_launcher, "行動醫療系統通知", extras
                                 .getString("message"), "hospinfosys", false,
                         PendingIntent.getActivity(context, 0, i,
                                 PendingIntent.FLAG_CANCEL_CURRENT));
