@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1">
-
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/botton_home"
+        android:textSize="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/editRegisterId"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="50dp" />
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="604dp">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"></FrameLayout>
 
         <WebView
             android:id="@+id/webview"
@@ -19,4 +32,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>
