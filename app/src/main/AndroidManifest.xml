@@ -7,12 +7,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission android:name="tw.com.hismax.test.hospinfosys.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission android:name="tw.com.hismax.test.hospinfosys.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
     <uses-permission android:name="tw.com.hismax.test.hospinfosys.permission.C2D_MESSAGE" />
 
     <uses-sdk android:minSdkVersion="23" />
 
-    <uses-permission android:name="android.permission.UPDATE_DEVICE_STATS"></uses-permission>
+    <!-- <uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" /> -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -57,12 +58,12 @@
                 <category android:name="tw.com.hismax.test.hospinfosys" />
             </intent-filter>
         </receiver>
-        <service android:name="tw.com.hismax.test.hospinfosys.GcmIntentService" />
+        <activity android:name=".Hospitalinfo" />
         <activity android:name=".Logout" />
-        <service android:name=".UIMain" />
         <activity android:name=".Web_list" />
         <activity android:name=".Menu" />
         <activity android:name=".Hos_record" />
+
 
     </application>
 

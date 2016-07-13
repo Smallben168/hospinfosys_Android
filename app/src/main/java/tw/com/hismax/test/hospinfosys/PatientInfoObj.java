@@ -16,6 +16,7 @@ import java.io.OutputStreamWriter;
  * Created by Ben on 16/7/8.
  */
 public class PatientInfoObj extends Application {
+    private boolean notFirstRun;
     private int chartNo;
     private String ptName;
     private String idNo;
@@ -126,5 +127,14 @@ public class PatientInfoObj extends Application {
     public boolean deleteFile(){
         boolean deleted = patientSetting.delete();
         return deleted;
+    }
+
+
+    public boolean isNotFirstRun() {
+        return notFirstRun;
+    }
+
+    public void setNotFirstRun(boolean notFirstRun) {
+        this.notFirstRun = notFirstRun;
     }
 }

@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import java.io.File;
 
 
@@ -96,13 +99,22 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        //Log.d("BEN", savedInstanceState.toString());
         patient = (PatientInfoObj)getApplicationContext();
         patient.readFileToObj();
-        if (patient.getIdNo() != null) {
-            SendIntent();
-            return;
+        if (patient.isNotFirstRun()) {
+
+        } else {
+            if (patient.getIdNo() != null) {
+                patient.setNotFirstRun(true);
+                SendIntent();
+                return;
+            }
         }
+        //} else {
+        //    Log.d("BEN", "aaaa");
+        //}
+
 
 //        Intent intent = new Intent(MainActivity.this,UIMain.class);
 //        startService(intent);
@@ -161,6 +173,10 @@ public class MainActivity extends Activity {
 //        }
 
         //openDB();
+        //***Ben: 檢查 GCM 服務是否可用----
+        if (checkPlayServices()) {
+            Log.d("BEN", "GCM 服務不可用");
+        }
     }
 
     public void ReadValue() {
@@ -279,6 +295,23 @@ public class MainActivity extends Activity {
             }
         }
     }
+    //***Ben :
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                //GooglePlayServicesUtil.getErrorDialog(resultCode,
+                //        this,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                Log.i("BEN", "This device is  supported.");
+            } else {
+                Log.i("BEN", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
     // Json2 呼叫事件  @@
 //    mThread_get=new HandlerThread("bb");
 //    mThread_get.start();

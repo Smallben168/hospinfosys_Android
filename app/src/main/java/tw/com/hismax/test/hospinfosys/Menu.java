@@ -36,6 +36,8 @@ public class Menu extends AppCompatActivity {
         Button btn5 = (Button) findViewById(R.id.button6);
         Button btn7 = (Button) findViewById(R.id.button7);
 
+
+
         btn1.setOnClickListener(new ClickButton());
         btn2.setOnClickListener(new ClickButton());
         btn3.setOnClickListener(new ClickButton());
@@ -50,14 +52,16 @@ public class Menu extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            Toast.makeText(Menu.this, "onClick", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Menu.this, "onClick-"+view.getId(), Toast.LENGTH_SHORT).show();
             switch (view.getId()) {
                 case R.id.button2: {
                     Log.e("button2", "123546");
                     Toast.makeText(Menu.this, "主畫面", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent();
-                    it.setClass(Menu.this, MainActivity.class);
+                    //it.setClass(Menu.this, MainActivity.class);
+                    it.setClass(Menu.this, Logout.class);
                     startActivity(it);
+                    Menu.this.finish();
                     break;
                 }
                 case R.id.button3: {
@@ -66,6 +70,7 @@ public class Menu extends AppCompatActivity {
                     Intent it = new Intent();
                     it.setClass(Menu.this, Web_list.class);
                     startActivity(it);
+                    Menu.this.finish();
                     break;
 
                 }
@@ -78,20 +83,24 @@ public class Menu extends AppCompatActivity {
                     Intent it = new Intent();
                     it.setClass(Menu.this, Web_list.class);
                     startActivity(it);
+                    Menu.this.finish();
                     break;
 
                 }
                 case R.id.button6: {
                     Intent it = new Intent();
-                    it.setClass(Menu.this, Web_list.class);
+                    it.setClass(Menu.this, MainActivity.class);
                     startActivity(it);
+                    Menu.this.finish();
                     break;
 
                 }
+                //***Ben : 會掛
                 case R.id.button7: {
                     Intent it = new Intent();
-                    it.setClass(Menu.this, Hosinfo.class);
+                    it.setClass(Menu.this, Hospitalinfo.class);
                     startActivity(it);
+                    Menu.this.finish();
                     break;
 
                 }
