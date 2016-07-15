@@ -58,7 +58,7 @@
                 <category android:name="tw.com.hismax.test.hospinfosys" />
             </intent-filter>
         </receiver>
-        <activity android:name=".Hospitalinfo" />
+        <activity android:name=".HospitalInfo" />
         <activity android:name=".Logout" />
         <activity android:name=".Web_list" />
         <activity android:name=".Menu" />

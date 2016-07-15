@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class Hospitalinfo extends AppCompatActivity {
+public class HospitalInfo extends AppCompatActivity {
     Button login_home;
 
     @Override
@@ -27,9 +27,9 @@ public class Hospitalinfo extends AppCompatActivity {
         public void onClick(View view) {
             Log.d("BEN", "Click....");
             Intent it = new Intent();
-            it.setClass(Hospitalinfo.this, Logout.class);
+            it.setClass(HospitalInfo.this, Logout.class);
             startActivity(it);
-            Hospitalinfo.this.finish();
+            HospitalInfo.this.finish();
         }
     }
 }

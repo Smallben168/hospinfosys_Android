@@ -98,7 +98,7 @@ public class Menu extends AppCompatActivity {
                 //***Ben : 會掛
                 case R.id.button7: {
                     Intent it = new Intent();
-                    it.setClass(Menu.this, Hospitalinfo.class);
+                    it.setClass(Menu.this, HospitalInfo.class);
                     startActivity(it);
                     Menu.this.finish();
                     break;
