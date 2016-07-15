@@ -42,32 +42,45 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     String id;
     String gcm_value;
     String result;
-    int chart_no;
-    String pt_name;
+
     TextView gcm_id;
     TextView text;
-    Button logout1, button_checkin1,menu1;
-    TextView pt_name1, num, doctor_name1, wait_no, _status_doc1,clinic_ps1;
-    //String view_no, doctor_name, _status_doc, location_code, doctor_no, A,_status;
+    Button butMenu;
+    TextView txtPtName, txtViewNo, txtDoctorName, wait_no, _status_doc1,txtClinicPs, txtDoc1;
+
     String result2;
-    String result3, doctor_name, current_no, _status_doc, _status,clinic_ps;
-    String location_code, view_no, clinic, doctor_no, duplicate_no, prenatal_care;
-    //Json2 json2;
-    Json_BeaconGet beaconGet;
+    String result3;
+    String clinic,  duplicate_no, prenatal_care;
+    Json2 json2;                //***Ben : http://163.18.22.69/rest/getTodayReg/get?chart_no=" + chart_no.toString()
+    Json_BeaconGet beaconGet;   //***Ben : "http://163.18.22.69/rest/receiver_beacon/get?beacon_uuid
     Json3_check Json3_check;
     Handler mThreadHandler_get;
     HandlerThread mThread_get;
     Handler mThreadHandler_check;
     HandlerThread mThread_check;
-    private Handler mUI_Handler;
-    String b_uuid = "39EC2745-4E96-455A-B80A-03B604BF677D";
+
+
     //    String b_uuid = "";
     WebView mywebview;
     int a = 1;
     int b = 1;
 
     //---Ben --------S
+    Handler mUI_Handler;
+    //掛號資料 ----
     PatientInfoObj patient;
+    int _chart_no;
+    String _pt_name;
+    String _doctor_no,_doctor_name;
+    String _httpResult;
+    int _view_no;
+    String _status_doc, _status;
+    String _location_code;
+    String _clinic_ps;
+    int _current_no;
+    String b_uuid;
+    String _doc1;
+    //---------------------
     SimpleDateFormat formatter;
     Date curDate;
     int timeForScaning = 1000;          //scan持續時間
@@ -75,7 +88,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     boolean stopBln;                    //控制 每 delaySec 只發生 onScan 一次
     //String beaconUuid;                  //存放 Beacon uuid 之變數-> b_uuid
     private Handler mHandler = new Handler();
-    int curNo;
+    //int curNo;
     //---------------E
 
     /**
@@ -90,47 +103,37 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         //***Ben --- 取出 patient 資料-------s
         patient = (PatientInfoObj)getApplicationContext();
 
-        pt_name = patient.getPtName();
-        chart_no =  patient.getChartNo();
-        //***Ben ---------------------------e
-
-        menu1 = (Button) findViewById(R.id.but_menu);
-        pt_name1 = (TextView) findViewById(R.id.textView1);
-        num = (TextView) findViewById(R.id.textView10);
-        doctor_name1 = (TextView) findViewById(R.id.textView9);
-//        wait_no = (TextView) findViewById(R.id.textView13);
-//        _status_doc1 = (TextView) findViewById(R.id.textView12);
-        clinic_ps1 = (TextView) findViewById(R.id.textView3);
-
-//        gcm_id = (TextView) findViewById(R.id.editRegisterId);
-//        gcm_id.setMovementMethod(ScrollingMovementMethod.getInstance());
-
-        pt_name1.setText(this.pt_name);
-
-//        gcm_id.setText(gcm_value);
+        _pt_name = patient.getPtName();
+        _chart_no =  patient.getChartNo();
+        //***Ben ----取出元件 ---------------e
+        butMenu = (Button) findViewById(R.id.but_menu);
+        txtPtName = (TextView) findViewById(R.id.textView1);
+        txtViewNo = (TextView) findViewById(R.id.textView10);
+        txtDoctorName = (TextView) findViewById(R.id.textView9);
+        txtClinicPs = (TextView) findViewById(R.id.textView3);
+        txtDoc1 = (TextView) findViewById(R.id.textView_Doc1);
+        //*** Ben --- set Value to 元件 -----
+        txtPtName.setText(_pt_name);
 
 
-        //Log.e("chart_no_logout", chart_no);
-        //id = bundle.getString("VALUE");
-        //text.setText(id);
-//        gcm_value = bundle.getString("GCM_String");
-//        gcm_id.setText(gcm_value);
+        butMenu.setOnClickListener(new ClickLogout());
 
-//        this.result = bundle.getString("result");
-//        gcm_id.setText(this.result);
-
-//        button_checkin1.setOnClickListener(new ClickLogout());
-
-        menu1.setOnClickListener(new ClickLogout());
-//        logout1.setOnClickListener(new ClickLogout());
-        Log.e("123654", "5343543");
         mUI_Handler = new Handler();
-        //Json2 呼叫事件  @@
-        mThread_get = new HandlerThread("bb");
-        mThread_get.start();
-        mThreadHandler_get = new Handler(mThread_get.getLooper());
+
+        //***Ben : call Json2
+        Thread mThread = new Thread(mainRun);
+        mThread.start();
+        //----------------------Ben
+//        mThread_get = new HandlerThread("bb");
+//        mThread_get.start();
+//        mThreadHandler_get = new Handler(mThread_get.getLooper());
         //***Ben : mThreadHandler_get.post(g1);
-        mThreadHandler_get.post(g1);
+//        mThreadHandler_get.post(g1);
+
+
+
+
+
 
         //Json3_checkin 呼叫
 //        mThread_check = new HandlerThread("cc");
@@ -161,15 +164,15 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
 //        doctor_no = bundle.getString("doctor_no");
 
-
-        /** create instance of iBeaconScanManager. */
-        miScaner = new iBeaconScanManager(this, this);
-        stopBln = false;
-        miScaner.startScaniBeacon(timeForScaning);
-        //***Ben : 建立定時器, 每 delaySec 啟動一次 scan Beacon
-        mHandler.removeCallbacks(onTimer);
-        mHandler.postDelayed(onTimer, delaySec);
-
+//Ben 暫時Test
+//        /** create instance of iBeaconScanManager. */
+//        miScaner = new iBeaconScanManager(this, this);
+//        stopBln = false;
+//        miScaner.startScaniBeacon(timeForScaning);
+//        //***Ben : 建立定時器, 每 delaySec 啟動一次 scan Beacon
+//        mHandler.removeCallbacks(onTimer);
+//        mHandler.postDelayed(onTimer, delaySec);
+//------------
 
 //        mListAdapter	= new BLEListAdapter(this);
 
@@ -231,7 +234,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 //beaconUuid = iBeacon.beaconUuid;
                 b_uuid = iBeacon.beaconUuid.toString();
                 Log.d("BEN", "Scan Beacon, UUID = " + b_uuid);
-                mThreadHandler_get.post(g1);
+                mThreadHandler_get.post(getRegRecordRun);
                 //*** Ben : 事情處理結束
 
 
@@ -355,49 +358,58 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         //Log.e("pt_name", pt_name.toString());
     }
 
-
-    public Runnable g1 = new Runnable() {
+    public Runnable mainRun = new Runnable() {
+        @Override
         public void run() {
-            beaconGet = new Json_BeaconGet(b_uuid.toString(), String.valueOf(chart_no));
-            mUI_Handler.post(g2);
+            json2 = new Json2(String.valueOf(_chart_no));
+            //------- Patient Register Record ----- Upper
+            if (json2.isHaveData()) {
+                _httpResult = json2.getjson2();
+                _view_no = json2.getview_no();
+                _doctor_no = json2.getdoctor_no();
+                _doctor_name = json2.getdoctor_name();
+                _status_doc = json2.get_status_doc();
+                _location_code = json2.getlocation_code();
+                _status = json2.get_status();
+                _clinic_ps = json2.getclinic_ps();
+                //------- Clinic Status ---- Bottom
+                _current_no = json2.getCurrentNo();
+                _doc1 = "目前看診至 : " +  _current_no;
+            } else {
+                _doctor_no = "";
+                _doctor_name = "";
+                _current_no = 0;
+                _clinic_ps = "";
+                _view_no = 0;
+                _doc1 = "沒有掛號資料 !!";
+            }
+            //Ben***----- refresh screen -----
+            mUI_Handler.post(runnableShow2Screen);
+
         }
     };
 
-    public Runnable g2 = new Runnable() {
+    public Runnable getRegRecordRun = new Runnable() {
         public void run() {
-            Logout.this.result3 = beaconGet.getjson2();
-            //Toast.makeText(MainActivity.this, json2.getString(), Toast.LENGTH_SHORT).show();
-            Logout.this.view_no = beaconGet.getview_no();
-            Logout.this.doctor_name = beaconGet.getdoctor_name();
-            Logout.this._status_doc = beaconGet.get_status_doc();
-            Logout.this.location_code = beaconGet.getlocation_code();
-            Logout.this._status = beaconGet.get_status();
-            Logout.this.doctor_no = beaconGet.getdoctor_no();
-            Logout.this.clinic_ps = beaconGet.getclinic_ps();
-            //***Ben -----s
-            Logout.this.curNo = beaconGet.getCurNo();
+            beaconGet = new Json_BeaconGet(b_uuid, String.valueOf(_chart_no));
+            //Ben***----- refresh screen -----
+            mUI_Handler.post(runnableShow2Screen);
+        }
+    };
 
-//            Log.e("doctor_name_g2", doctor_name.toString());
-
-//            SendIntent();
-//            Log.e("A123", A.toString() + "123");
-//            Log.i("_status_doc", _status_doc.toString() + "123");
-
-            doctor_name1.setText(beaconGet.getdoctor_name());
-//            wait_no.setText(json2.getlocation_code());
-            num.setText(beaconGet.getview_no());
-            clinic_ps1.setText(beaconGet.getclinic_ps());
-
-//            if (_status.toString().equals("error")) {
-//                _status_doc1.setText(json2.get_status_doc());
-//            }
-            Log.i("doctor_no", doctor_no.toString() + "123");
-
-            WebView myWebView = (WebView) findViewById(R.id.webview);
-            myWebView.getSettings().setJavaScriptEnabled(true);
-            myWebView.requestFocus();
-            myWebView.setWebViewClient(new MyWebViewClient());
-            myWebView.loadUrl("http://163.18.22.69/static/doctor_images/" + doctor_no.toString() + ".jpeg");
+    public Runnable runnableShow2Screen = new Runnable() {
+        public void run() {
+            txtDoctorName.setText(_doctor_name);
+            txtClinicPs.setText(_clinic_ps);
+            txtDoc1.setText(_doc1);
+            txtViewNo.setText(String.valueOf(_view_no));
+            if (!_doctor_no.equals("")) {
+                WebView myWebView = (WebView) findViewById(R.id.webview);
+                myWebView.getSettings().setJavaScriptEnabled(true);
+                myWebView.requestFocus();
+                myWebView.setWebViewClient(new MyWebViewClient());
+                myWebView.loadUrl("http://163.18.22.69/static/doctor_images/" + String.valueOf(_doctor_no) + ".jpeg");
+            }
         }
     };
 

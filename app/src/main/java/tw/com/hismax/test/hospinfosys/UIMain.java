@@ -344,7 +344,8 @@ public class UIMain extends AppCompatActivity implements iBeaconScanManager.OniB
 
     public Runnable g1 = new Runnable() {
         public void run() {
-            json2 = new Json2(b_uuid.toString(), chart_no.toString());
+            //json2 = new Json2(b_uuid.toString(), chart_no.toString());
+            json2 = new Json2(chart_no.toString());
             mUI_Handler.post(g2);
         }
     };
@@ -353,7 +354,7 @@ public class UIMain extends AppCompatActivity implements iBeaconScanManager.OniB
         public void run() {
             UIMain.this.result2 = json2.getjson2();
             //Toast.makeText(MainActivity.this, json2.getString(), Toast.LENGTH_SHORT).show();
-            UIMain.this.view_no = json2.getview_no();
+            UIMain.this.view_no = String.valueOf(json2.getview_no());
             UIMain.this.doctor_name = json2.getdoctor_name();
             UIMain.this._status_doc = json2.get_status_doc();
             UIMain.this.location_code = json2.getlocation_code();
