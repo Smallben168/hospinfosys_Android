@@ -42,7 +42,7 @@ public class Json2 extends Thread {
 
         // 透過HTTP連線取得回應
         try {
-            Log.e("chart_no2134586", chart_no.toString());
+            Log.d("BEN", "Json2 Start !!");
             jsonObj.put("", test);
             JArray.put(jsonObj);
             StringEntity se = new StringEntity(JArray.toString());
@@ -85,24 +85,6 @@ public class Json2 extends Thread {
                 haveData = false;
             }
 
-//            this._status = new JSONArray(this.result2).getJSONObject(0).getString("_status");
-//            Log.e("_status_json2", _status.toString());
-//            if (this._status.toString().equals("success")) {
-//
-//                this.view_no = new JSONArray(this.result2).getJSONObject(0).getString("view_no");
-//                this._status_doc = new JSONArray(this.result2).getJSONObject(0).getString("_status_doc");
-//                this.location_code = new JSONArray(this.result2).getJSONObject(0).getString("location_code");
-//                this.doctor_no = new JSONArray(this.result2).getJSONObject(0).getString("doctor_no");
-//                this.doctor_name = new JSONArray(this.result2).getJSONObject(0).getString("doctor_name");
-//                this.doctor_name = new String(doctor_name.getBytes("ISO-8859-1"), "UTF-8");   //亂碼變中文
-//                this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
-//                Log.e("doctor_name_json2", doctor_name.toString());
-//                Log.e("_status_doc_json2", _status_doc.toString());
-//            } else {
-//                this._status_doc = new JSONArray(this.result2).getJSONObject(0).getString("_status_doc");
-//                this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
-//                Log.e("_status_doc_json2_1", _status_doc.toString());
-//            }
 
         } catch (JSONException e) {
             e.printStackTrace();

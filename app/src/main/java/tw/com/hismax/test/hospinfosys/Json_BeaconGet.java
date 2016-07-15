@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class Json_BeaconGet extends Thread {
     String result2 = "";
-    String view_no = "";
+    int view_no = 0;
     private int curNo=0;
     String doctor_name,clinic_ps = "";
     String _status_doc, _status = "";
@@ -27,7 +27,8 @@ public class Json_BeaconGet extends Thread {
     JSONArray JArray = new JSONArray();
     JSONObject jsonObj = new JSONObject();
     String test = "";
-
+    private boolean haveData = false;
+    String url = "";
 
     public Json_BeaconGet(String b_uuid, String chart_no) {
 //        InputStream is = null;
@@ -40,61 +41,57 @@ public class Json_BeaconGet extends Thread {
 
         // 透過HTTP連線取得回應
         try {
-            Log.e("chart_no=", chart_no.toString());
+            Log.d("BEN", "Json_BeaconGet Start !!");
+            //Log.e("chart_no=", chart_no.toString());
             jsonObj.put("", test);
             JArray.put(jsonObj);
             StringEntity se = new StringEntity(JArray.toString());
 
             HttpClient client = new DefaultHttpClient(); // for port 80 requests!
-            Log.i("b_uuid.toString()", b_uuid.toString());
-            Log.i("chart_no.toString()", chart_no.toString());
-            HttpGet httpget = new HttpGet("http://163.18.22.69/rest/receiver_beacon/get?beacon_uuid=" + b_uuid.toString() + "&chart_no=" + chart_no.toString());
+            Log.d("BEN", "b_uuid=" + b_uuid);
+            Log.d("BEN", "chart_no = " + chart_no);
+            //url = "http://163.18.22.69/rest/receiver_beacon/get?beacon_uuid=" + b_uuid + "&chart_no=" + chart_no;
+            url = "http://127.0.0.1:8000/rest/receiver_beacon/get?beacon_uuid=" + b_uuid + "&chart_no=" + chart_no;
+            Log.d("BEN", "url = " + url);
+            HttpGet httpget = new HttpGet(url);
             //httpget.setEntity(se);
 
             HttpResponse response = client.execute(httpget);
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 this.result2 = EntityUtils.toString(entity);
-                Log.i("BEN", result2.toString());
+                Log.d("BEN", "Json_BeaconGet = " + result2.toString());
+                if (result2.equals("")) {
+                    haveData =false;
+                } else {
+                    this._status = new JSONArray(this.result2).getJSONObject(0).getString("_status");
+                    Log.d("Ben", "json_BeaconGet status= " + this._status);
+                    if (_status.equals("success")) {
+                        haveData = true;
+                        this._status = new JSONArray(this.result2).getJSONObject(0).getString("_status");
+                        this.view_no = new JSONArray(this.result2).getJSONObject(0).getInt("view_no");
+                        this._status_doc = new JSONArray(this.result2).getJSONObject(0).getString("_status_doc");
+                        this.location_code = new JSONArray(this.result2).getJSONObject(0).getString("location_code");
+                        this.doctor_no = new JSONArray(this.result2).getJSONObject(0).getString("doctor_no");
+                        this.doctor_name = new JSONArray(this.result2).getJSONObject(0).getString("doctor_name");
+                        this.clinic_ps = new JSONArray(this.result2).getJSONObject(0).getString("clinic_ps");
+                        this.doctor_name = new String(doctor_name.getBytes("ISO-8859-1"), "UTF-8");   //亂碼變中文
+                        this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
+                        this.clinic_ps = new String(clinic_ps.getBytes("ISO-8859-1"), "UTF-8");
+                        //***Ben -------s
+                        this.setCurNo(new JSONArray(this.result2).getJSONObject(0).getInt("current_no"));
+
+                        Log.e("doctor_name_json2", doctor_name.toString());
+                        Log.e("_status_doc_json2", _status_doc.toString());
+                        Log.e("clinic_ps_json2", clinic_ps.toString());
+                    } else {
+                        haveData = false;
+                    }
+                }
             } else {
-                Log.i("BEN", "Get Data : ok");
+                Log.d("BEN", "Get Data : ok");
+                haveData = false;
             }
-
-//            this._status = new JSONArray(this.result2).getJSONObject(0).getString("_status");
-//            Log.e("_status_json2", _status.toString());
-//            if (this._status.toString().equals("success")) {
-//
-//                this.view_no = new JSONArray(this.result2).getJSONObject(0).getString("view_no");
-//                this._status_doc = new JSONArray(this.result2).getJSONObject(0).getString("_status_doc");
-//                this.location_code = new JSONArray(this.result2).getJSONObject(0).getString("location_code");
-//                this.doctor_no = new JSONArray(this.result2).getJSONObject(0).getString("doctor_no");
-//                this.doctor_name = new JSONArray(this.result2).getJSONObject(0).getString("doctor_name");
-//                this.doctor_name = new String(doctor_name.getBytes("ISO-8859-1"), "UTF-8");   //亂碼變中文
-//                this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
-//                Log.e("doctor_name_json2", doctor_name.toString());
-//                Log.e("_status_doc_json2", _status_doc.toString());
-//            } else {
-//                this._status_doc = new JSONArray(this.result2).getJSONObject(0).getString("_status_doc");
-//                this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
-//                Log.e("_status_doc_json2_1", _status_doc.toString());
-//            }
-
-            this._status = new JSONArray(this.result2).getJSONObject(0).getString("_status");
-            this.view_no = new JSONArray(this.result2).getJSONObject(0).getString("view_no");
-            this._status_doc = new JSONArray(this.result2).getJSONObject(0).getString("_status_doc");
-            this.location_code = new JSONArray(this.result2).getJSONObject(0).getString("location_code");
-            this.doctor_no = new JSONArray(this.result2).getJSONObject(0).getString("doctor_no");
-            this.doctor_name = new JSONArray(this.result2).getJSONObject(0).getString("doctor_name");
-            this.clinic_ps = new JSONArray(this.result2).getJSONObject(0).getString("clinic_ps");
-            this.doctor_name = new String(doctor_name.getBytes("ISO-8859-1"), "UTF-8");   //亂碼變中文
-            this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
-            this.clinic_ps = new String(clinic_ps.getBytes("ISO-8859-1"), "UTF-8");
-            //***Ben -------s
-            this.setCurNo(new JSONArray(this.result2).getJSONObject(0).getInt("current_no"));
-
-            Log.e("doctor_name_json2", doctor_name.toString());
-            Log.e("_status_doc_json2", _status_doc.toString());
-            Log.e("clinic_ps_json2", clinic_ps.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -126,7 +123,7 @@ public class Json_BeaconGet extends Thread {
         return this.doctor_name;
     }
 
-    public String getview_no() {
+    public int getview_no() {
         return this.view_no;
     }
 
@@ -148,6 +145,14 @@ public class Json_BeaconGet extends Thread {
 
     public void setCurNo(int curNo) {
         this.curNo = curNo;
+    }
+
+    public boolean isHaveData() {
+        return haveData;
+    }
+
+    public void setHaveData(boolean haveData) {
+        this.haveData = haveData;
     }
 }
 

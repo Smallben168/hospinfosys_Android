@@ -120,19 +120,9 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
         mUI_Handler = new Handler();
 
-        //***Ben : call Json2
+        //***Ben : call Json2 取得今日看診資料 -----------
         Thread mThread = new Thread(mainRun);
         mThread.start();
-        //----------------------Ben
-//        mThread_get = new HandlerThread("bb");
-//        mThread_get.start();
-//        mThreadHandler_get = new Handler(mThread_get.getLooper());
-        //***Ben : mThreadHandler_get.post(g1);
-//        mThreadHandler_get.post(g1);
-
-
-
-
 
 
         //Json3_checkin 呼叫
@@ -165,13 +155,13 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 //        doctor_no = bundle.getString("doctor_no");
 
 //Ben 暫時Test
-//        /** create instance of iBeaconScanManager. */
-//        miScaner = new iBeaconScanManager(this, this);
-//        stopBln = false;
-//        miScaner.startScaniBeacon(timeForScaning);
-//        //***Ben : 建立定時器, 每 delaySec 啟動一次 scan Beacon
-//        mHandler.removeCallbacks(onTimer);
-//        mHandler.postDelayed(onTimer, delaySec);
+        /** create instance of iBeaconScanManager. */
+        miScaner = new iBeaconScanManager(this, this);
+        stopBln = false;
+        miScaner.startScaniBeacon(timeForScaning);
+        //***Ben : 建立定時器, 每 delaySec 啟動一次 scan Beacon
+        mHandler.removeCallbacks(onTimer);
+        mHandler.postDelayed(onTimer, delaySec);
 //------------
 
 //        mListAdapter	= new BLEListAdapter(this);
@@ -234,7 +224,11 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 //beaconUuid = iBeacon.beaconUuid;
                 b_uuid = iBeacon.beaconUuid.toString();
                 Log.d("BEN", "Scan Beacon, UUID = " + b_uuid);
-                mThreadHandler_get.post(getRegRecordRun);
+
+                //***Ben : call Json_BeaconGet 由Beacon觸發 取得今日看診資料 -----------
+                Thread mThread = new Thread(getRegRecordRun);
+                mThread.start();
+                //mThreadHandler_get.post(getRegRecordRun);
                 //*** Ben : 事情處理結束
 
 
@@ -392,6 +386,28 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     public Runnable getRegRecordRun = new Runnable() {
         public void run() {
             beaconGet = new Json_BeaconGet(b_uuid, String.valueOf(_chart_no));
+            if (beaconGet.isHaveData()) {
+                _httpResult = beaconGet.getjson2();
+
+                _view_no = beaconGet.getview_no();
+                _doctor_no = json2.getdoctor_no();
+                _doctor_name = json2.getdoctor_name();
+                _status_doc = json2.get_status_doc();
+                _location_code = json2.getlocation_code();
+                _status = json2.get_status();
+                _clinic_ps = json2.getclinic_ps();
+                //------- Clinic Status ---- Bottom
+                _current_no = json2.getCurrentNo();
+                _doc1 = "目前看診至 : " +  _current_no;
+            } else {
+                _doctor_no = "";
+                _doctor_name = "";
+                _current_no = 0;
+                _clinic_ps = "";
+                _view_no = 0;
+                _doc1 = "沒有掛號資料 !!";
+            }
+
             //Ben***----- refresh screen -----
             mUI_Handler.post(runnableShow2Screen);
         }
