@@ -7,9 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-/**
- * Created by OH HO on 2016/6/27.
- */
 public class Hospitalinfo extends AppCompatActivity {
     Button login_home;
 
