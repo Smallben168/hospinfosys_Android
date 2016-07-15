@@ -52,7 +52,8 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     String result2;
     String result3, doctor_name, current_no, _status_doc, _status,clinic_ps;
     String location_code, view_no, clinic, doctor_no, duplicate_no, prenatal_care;
-    Json2 json2;
+    //Json2 json2;
+    Json_BeaconGet beaconGet;
     Json3_check Json3_check;
     Handler mThreadHandler_get;
     HandlerThread mThread_get;
@@ -74,6 +75,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     boolean stopBln;                    //控制 每 delaySec 只發生 onScan 一次
     //String beaconUuid;                  //存放 Beacon uuid 之變數-> b_uuid
     private Handler mHandler = new Handler();
+    int curNo;
     //---------------E
 
     /**
@@ -127,6 +129,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         mThread_get = new HandlerThread("bb");
         mThread_get.start();
         mThreadHandler_get = new Handler(mThread_get.getLooper());
+        //***Ben : mThreadHandler_get.post(g1);
         mThreadHandler_get.post(g1);
 
         //Json3_checkin 呼叫
@@ -355,32 +358,35 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
     public Runnable g1 = new Runnable() {
         public void run() {
-            json2 = new Json2(b_uuid.toString(), String.valueOf(chart_no));
+            beaconGet = new Json_BeaconGet(b_uuid.toString(), String.valueOf(chart_no));
             mUI_Handler.post(g2);
         }
     };
 
     public Runnable g2 = new Runnable() {
         public void run() {
-            Logout.this.result3 = json2.getjson2();
+            Logout.this.result3 = beaconGet.getjson2();
             //Toast.makeText(MainActivity.this, json2.getString(), Toast.LENGTH_SHORT).show();
-            Logout.this.view_no = json2.getview_no();
-            Logout.this.doctor_name = json2.getdoctor_name();
-            Logout.this._status_doc = json2.get_status_doc();
-            Logout.this.location_code = json2.getlocation_code();
-            Logout.this._status = json2.get_status();
-            Logout.this.doctor_no = json2.getdoctor_no();
-            Logout.this.clinic_ps = json2.getclinic_ps();
+            Logout.this.view_no = beaconGet.getview_no();
+            Logout.this.doctor_name = beaconGet.getdoctor_name();
+            Logout.this._status_doc = beaconGet.get_status_doc();
+            Logout.this.location_code = beaconGet.getlocation_code();
+            Logout.this._status = beaconGet.get_status();
+            Logout.this.doctor_no = beaconGet.getdoctor_no();
+            Logout.this.clinic_ps = beaconGet.getclinic_ps();
+            //***Ben -----s
+            Logout.this.curNo = beaconGet.getCurNo();
+
 //            Log.e("doctor_name_g2", doctor_name.toString());
 
 //            SendIntent();
 //            Log.e("A123", A.toString() + "123");
 //            Log.i("_status_doc", _status_doc.toString() + "123");
 
-            doctor_name1.setText(json2.getdoctor_name());
+            doctor_name1.setText(beaconGet.getdoctor_name());
 //            wait_no.setText(json2.getlocation_code());
-            num.setText(json2.getview_no());
-            clinic_ps1.setText(json2.getclinic_ps());
+            num.setText(beaconGet.getview_no());
+            clinic_ps1.setText(beaconGet.getclinic_ps());
 
 //            if (_status.toString().equals("error")) {
 //                _status_doc1.setText(json2.get_status_doc());

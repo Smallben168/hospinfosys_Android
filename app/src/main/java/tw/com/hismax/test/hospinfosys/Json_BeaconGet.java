@@ -19,6 +19,7 @@ import java.io.IOException;
 public class Json_BeaconGet extends Thread {
     String result2 = "";
     String view_no = "";
+    private int curNo=0;
     String doctor_name,clinic_ps = "";
     String _status_doc, _status = "";
     String location_code = "";
@@ -54,9 +55,9 @@ public class Json_BeaconGet extends Thread {
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 this.result2 = EntityUtils.toString(entity);
-                Log.i("fuck123", result2.toString());
+                Log.i("BEN", result2.toString());
             } else {
-                Log.i("fuck", "ok");
+                Log.i("BEN", "Get Data : ok");
             }
 
 //            this._status = new JSONArray(this.result2).getJSONObject(0).getString("_status");
@@ -88,6 +89,9 @@ public class Json_BeaconGet extends Thread {
             this.doctor_name = new String(doctor_name.getBytes("ISO-8859-1"), "UTF-8");   //亂碼變中文
             this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
             this.clinic_ps = new String(clinic_ps.getBytes("ISO-8859-1"), "UTF-8");
+            //***Ben -------s
+            this.setCurNo(new JSONArray(this.result2).getJSONObject(0).getInt("current_no"));
+
             Log.e("doctor_name_json2", doctor_name.toString());
             Log.e("_status_doc_json2", _status_doc.toString());
             Log.e("clinic_ps_json2", clinic_ps.toString());
@@ -136,6 +140,14 @@ public class Json_BeaconGet extends Thread {
 
     public String getclinic_ps() {
         return this.clinic_ps;
+    }
+
+    public int getCurNo() {
+        return curNo;
+    }
+
+    public void setCurNo(int curNo) {
+        this.curNo = curNo;
     }
 }
 
