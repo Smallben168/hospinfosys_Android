@@ -25,6 +25,7 @@ public class Json_BeaconSet extends Thread {
     String _status_doc, _status = "";
     String location_code = "";
     String doctor_no = "";
+    String exceptViewTime="";
     JSONArray JArray = new JSONArray();
     JSONObject jsonObj = new JSONObject();
     String test = "";
@@ -69,25 +70,15 @@ public class Json_BeaconSet extends Thread {
                     haveData =false;
                 } else {
                     this._status = new JSONArray(this.result).getJSONObject(0).getString("_status");
-                    Log.d("Ben", "json_BeaconGet status= " + this._status);
+                    this._status_doc = new JSONArray(this.result).getJSONObject(0).getString("_status_doc");
+                    Log.d("Ben", "json_BeaconSet status= " + this._status);
                     if (_status.equals("success")) {
                         haveData = true;
-                        this._status = new JSONArray(this.result).getJSONObject(0).getString("_status");
-                        this.view_no = new JSONArray(this.result).getJSONObject(0).getInt("view_no");
-                        this._status_doc = new JSONArray(this.result).getJSONObject(0).getString("_status_doc");
-                        this.location_code = new JSONArray(this.result).getJSONObject(0).getString("location_code");
-                        this.doctor_no = new JSONArray(this.result).getJSONObject(0).getString("doctor_no");
-                        this.doctor_name = new JSONArray(this.result).getJSONObject(0).getString("doctor_name");
-                        this.clinic_ps = new JSONArray(this.result).getJSONObject(0).getString("clinic_ps");
-                        this.doctor_name = new String(doctor_name.getBytes("ISO-8859-1"), "UTF-8");   //亂碼變中文
-                        this._status_doc = new String(_status_doc.getBytes("ISO-8859-1"), "UTF-8");
-                        this.clinic_ps = new String(clinic_ps.getBytes("ISO-8859-1"), "UTF-8");
-                        //***Ben -------s
-                        this.setCurNo(new JSONArray(this.result).getJSONObject(0).getInt("current_no"));
+                        if (this._status_doc.equals("REG")){
+                            this.view_no = new JSONArray(this.result).getJSONObject(0).getInt("view_no");
+                            this.exceptViewTime = new JSONArray(this.result).getJSONObject(0).getString("except_view_time");
+                        }
 
-                        Log.e("doctor_name_json2", doctor_name.toString());
-                        Log.e("_status_doc_json2", _status_doc.toString());
-                        Log.e("clinic_ps_json2", clinic_ps.toString());
                     } else {
                         haveData = false;
                     }
@@ -110,53 +101,6 @@ public class Json_BeaconSet extends Thread {
         }
     }
 
-    //回傳值到MainActivity
-    public String getjson2() {
-        return this.result;
-    }
 
-    public String get_status_doc() {
-        return this._status_doc;
-    }
-
-    public String getlocation_code() {
-        return this.location_code;
-    }
-
-    public String getdoctor_name() {
-        return this.doctor_name;
-    }
-
-    public int getview_no() {
-        return this.view_no;
-    }
-
-    public String getdoctor_no() {
-        return this.doctor_no;
-    }
-
-    public String get_status() {
-        return this._status;
-    }
-
-    public String getclinic_ps() {
-        return this.clinic_ps;
-    }
-
-    public int getCurNo() {
-        return curNo;
-    }
-
-    public void setCurNo(int curNo) {
-        this.curNo = curNo;
-    }
-
-    public boolean isHaveData() {
-        return haveData;
-    }
-
-    public void setHaveData(boolean haveData) {
-        this.haveData = haveData;
-    }
 }
 
