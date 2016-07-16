@@ -86,13 +86,14 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     Boolean butCmdVisible = false;
     String _processType = "";
     String _exceptionTime = "";
+    int notFoundBeaconCount=0;
     //---------------------
     SimpleDateFormat formatter;
     Date curDate;
-    int timeForScaning = 1000;          //scan持續時間
-    int delaySec = 10000;                //scan間隔時間
-    boolean stopBln;                    //控制 每 delaySec 只發生 onScan 一次
-    //String beaconUuid;                  //存放 Beacon uuid 之變數-> b_uuid
+    int timeForScaning = 1000;              //scan持續時間
+    int delaySec = 10000;                   //scan間隔時間
+    boolean stopBln;                        //控制 每 delaySec 只發生 onScan 一次
+    //String beaconUuid;                    //存放 Beacon uuid 之變數-> b_uuid
     private Handler mHandler = new Handler();
     //int curNo;
     //---------------E
@@ -168,7 +169,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
 //        doctor_no = bundle.getString("doctor_no");
 
-//Ben 暫時Test
+//***Ben
         /** create instance of iBeaconScanManager. */
         miScaner = new iBeaconScanManager(this, this);
         stopBln = false;
@@ -213,6 +214,16 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
             //mBeaconUuid.setText(beaconUuid);
             //mScanTime.setText(formatter.format(curDate));
 
+            //Ben***----- refresh screen -----
+            // 當移除Beacon時清除畫面, 此段需觀察看看有無問題
+            notFoundBeaconCount++;
+            if (notFoundBeaconCount > 2) {
+                _doc2 = "";
+                butCmdVisible = false;
+                mUI_Handler.post(runnableShow2Screen);
+            }
+            //--------------------------------
+
             //***Ben : 再重新開始 scan Beacon
             miScaner.startScaniBeacon(timeForScaning);
             stopBln = false;
@@ -228,7 +239,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         if (!stopBln) {
             synchronized(this) {
                 //***Ben : 獲取當前時間
-
+                notFoundBeaconCount = 0;
                 stopBln = true;
                 curDate = new Date(System.currentTimeMillis());
 
