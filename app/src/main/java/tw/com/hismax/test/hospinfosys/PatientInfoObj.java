@@ -3,7 +3,6 @@ package tw.com.hismax.test.hospinfosys;
 import android.app.Application;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
 /**
  * Created by Ben on 16/7/8.
@@ -24,6 +24,8 @@ public class PatientInfoObj extends Application {
 
     private File sdcard;
     private File patientSetting;
+
+    private List<MessageItem> msgList;
 
     public PatientInfoObj(){
         sdcard = new File(Environment.getExternalStorageDirectory(),"Android/data/tw.com.hismax.test.hospinfosys/files");
@@ -136,5 +138,17 @@ public class PatientInfoObj extends Application {
 
     public void setNotFirstRun(boolean notFirstRun) {
         this.notFirstRun = notFirstRun;
+    }
+
+    public List<MessageItem> getMsgList() {
+        return msgList;
+    }
+    //***Ben : Add Message
+    public void addMsgList(MessageItem item){
+        msgList.add(item);
+    }
+    //***Ben : Clear Message
+    public void clrMsgList(){
+        msgList.clear();
     }
 }

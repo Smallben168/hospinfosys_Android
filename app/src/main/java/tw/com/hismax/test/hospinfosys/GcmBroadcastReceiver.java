@@ -4,6 +4,7 @@ package tw.com.hismax.test.hospinfosys;
  * Created by apple on 16/5/1.
  */
 
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,6 +15,9 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 接收來自GCM的訊息
  *
@@ -23,6 +27,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
     public static final int NOTIFICATION_ID = 0;
+    PatientInfoObj patient;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -51,6 +56,14 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
                         PendingIntent.getActivity(context, 0, i,
                                 PendingIntent.FLAG_CANCEL_CURRENT));
             }
+            //Ben*** : 保留訊息 ---------------------------s
+            Log.d("BEN", "GCM訊息:"+ extras.getString("message"));
+            //***Ben --- 取出 patient 資料-------s
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String currentDateandTime = sdf.format(new Date());
+            patient = (PatientInfoObj) context.getApplicationContext();
+            patient.addMsgList(new MessageItem(currentDateandTime, extras.getString("message")));
+            //---------------------------------------------e
         }
         setResultCode(Activity.RESULT_OK);
     }
