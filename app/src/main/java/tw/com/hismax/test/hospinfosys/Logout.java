@@ -84,7 +84,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     SimpleDateFormat formatter;
     Date curDate;
     int timeForScaning = 1000;          //scan持續時間
-    int delaySec = 5000;                //scan間隔時間
+    int delaySec = 10000;                //scan間隔時間
     boolean stopBln;                    //控制 每 delaySec 只發生 onScan 一次
     //String beaconUuid;                  //存放 Beacon uuid 之變數-> b_uuid
     private Handler mHandler = new Handler();
