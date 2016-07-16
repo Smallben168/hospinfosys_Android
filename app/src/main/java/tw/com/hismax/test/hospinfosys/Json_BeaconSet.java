@@ -6,6 +6,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -16,7 +17,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 
-public class Json_BeaconGet extends Thread {
+public class Json_BeaconSet extends Thread {
     String result = "";
     int view_no = 0;
     private int curNo=0;
@@ -31,7 +32,7 @@ public class Json_BeaconGet extends Thread {
     String url = "";
 
 
-    public Json_BeaconGet(String b_uuid, String chart_no) {
+    public Json_BeaconSet(String inpData) {
 //        InputStream is = null;
 //        String result = "";
 //        //若線上資料為陣列，則使用JSONArray
@@ -42,27 +43,28 @@ public class Json_BeaconGet extends Thread {
 
         // 透過HTTP連線取得回應
         try {
-            Log.d("BEN", "Json_BeaconGet Start !!");
-            //Log.e("chart_no=", chart_no.toString());
+            Log.d("BEN", "Json_BeaconSet Start !!");
+            //***Ben: ?
             jsonObj.put("", test);
             JArray.put(jsonObj);
-            StringEntity se = new StringEntity(JArray.toString());
 
             HttpClient client = new DefaultHttpClient(); // for port 80 requests!
-            Log.d("BEN", "b_uuid=" + b_uuid);
-            Log.d("BEN", "chart_no = " + chart_no);
-            url = "http://163.18.22.69/rest/receiver_beacon/get?beacon_uuid=" + b_uuid + "&chart_no=" + chart_no;
-            //***Ben : for Local Server
-            //url = "http://127.0.0.1:8000/rest/receiver_beacon/get?beacon_uuid=" + b_uuid + "&chart_no=" + chart_no;
+            Log.d("BEN", "input data=" + inpData);
+            url = "http://163.18.22.69/rest/receiver_beacon/set";
             Log.d("BEN", "url = " + url);
-            HttpGet httpget = new HttpGet(url);
-            //httpget.setEntity(se);
+            HttpPost httpost = new HttpPost(url);
+            StringEntity se = new StringEntity(inpData);
+            httpost.setEntity(se);
 
-            HttpResponse response = client.execute(httpget);
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                this.result = EntityUtils.toString(entity);
-                Log.d("BEN", "Json_BeaconGet = " + result.toString());
+            httpost.setHeader("Accept", "application/json");
+            httpost.setHeader("Content-type", "application/json");
+            HttpResponse responsePOST = client.execute(httpost);
+
+            HttpEntity resEntity = responsePOST.getEntity();
+
+            if (resEntity != null) {
+                this.result = EntityUtils.toString(resEntity);
+                Log.d("BEN", "Json_BeaconSet = " + result.toString());
                 if (result.equals("")) {
                     haveData =false;
                 } else {

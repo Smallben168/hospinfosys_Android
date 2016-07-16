@@ -45,8 +45,8 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
     TextView gcm_id;
     TextView text;
-    Button butMenu;
-    TextView txtPtName, txtViewNo, txtDoctorName, wait_no, _status_doc1,txtClinicPs, txtDoc1;
+    Button butMenu, butCmd;
+    TextView txtPtName, txtViewNo, txtDoctorName, wait_no, _status_doc1,txtClinicPs, txtDoc1, txtDoc2, txtDoc3, txtDoc4, txtDoc5, txtDoc6;
 
     String result2;
     String result3;
@@ -79,7 +79,9 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     String _clinic_ps;
     int _current_no;
     String b_uuid;
-    String _doc1;
+    String _doc1="", _doc2="", _doc3="", _doc4="", _doc5="", _doc6="";
+    Boolean butCmdVisible = false;
+    String _processType = "";
     //---------------------
     SimpleDateFormat formatter;
     Date curDate;
@@ -105,6 +107,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
         _pt_name = patient.getPtName();
         _chart_no =  patient.getChartNo();
+
         //***Ben ----取出元件 ---------------e
         butMenu = (Button) findViewById(R.id.but_menu);
         txtPtName = (TextView) findViewById(R.id.textView1);
@@ -112,12 +115,19 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         txtDoctorName = (TextView) findViewById(R.id.textView9);
         txtClinicPs = (TextView) findViewById(R.id.textView3);
         txtDoc1 = (TextView) findViewById(R.id.textView_Doc1);
+        txtDoc2 = (TextView) findViewById(R.id.textView_Doc2);
+        txtDoc3 = (TextView) findViewById(R.id.textView_Doc3);
+        txtDoc4 = (TextView) findViewById(R.id.textView_Doc4);
+        txtDoc5 = (TextView) findViewById(R.id.textView_Doc5);
+        txtDoc6 = (TextView) findViewById(R.id.textView_Doc6);
+
+        butCmd =  (Button) findViewById(R.id.butCmd);
+
         //*** Ben --- set Value to 元件 -----
         txtPtName.setText(_pt_name);
-
-
+        DisplayDocArea();
         butMenu.setOnClickListener(new ClickLogout());
-
+        butCmd.setOnClickListener(new ClickConform());
         mUI_Handler = new Handler();
 
         //***Ben : call Json2 取得今日看診資料 -----------
@@ -302,7 +312,13 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
         }
     }
+    class ClickConform implements View.OnClickListener{
 
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
     public void SendIntent2() {
         Intent it = new Intent();
         it.setClass(Logout.this,Menu.class);
@@ -396,9 +412,12 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 _location_code = json2.getlocation_code();
                 _status = json2.get_status();
                 _clinic_ps = json2.getclinic_ps();
+                _processType = json2.get_status_doc();
                 //------- Clinic Status ---- Bottom
                 _current_no = json2.getCurrentNo();
                 _doc1 = "目前看診至 : " +  _current_no;
+                _doc2 = "確定預約報到 ? ";
+                butCmdVisible = true;
             } else {
                 _doctor_no = "";
                 _doctor_name = "";
@@ -406,6 +425,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 _clinic_ps = "";
                 _view_no = 0;
                 _doc1 = "沒有掛號資料 !!";
+                butCmdVisible = false;
             }
 
             //Ben***----- refresh screen -----
@@ -417,7 +437,6 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         public void run() {
             txtDoctorName.setText(_doctor_name);
             txtClinicPs.setText(_clinic_ps);
-            txtDoc1.setText(_doc1);
             txtViewNo.setText(String.valueOf(_view_no));
             if (!_doctor_no.equals("")) {
                 WebView myWebView = (WebView) findViewById(R.id.webview);
@@ -426,8 +445,26 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 myWebView.setWebViewClient(new MyWebViewClient());
                 myWebView.loadUrl("http://163.18.22.69/static/doctor_images/" + String.valueOf(_doctor_no) + ".jpeg");
             }
+            DisplayDocArea();
         }
     };
+
+    private void DisplayDocArea(){
+        txtDoc1.setText(_doc1);
+        txtDoc2.setText(_doc2);
+        txtDoc3.setText(_doc3);
+        txtDoc4.setText(_doc4);
+        txtDoc5.setText(_doc5);
+        txtDoc6.setText(_doc6);
+        if (butCmdVisible) {
+            butCmd.setVisibility(View.VISIBLE);
+            if (_processType.equals("REG")) butCmd.setText("預約報到");
+            if (_processType.equals("PRE_DEPT_SCHEDULE")) butCmd.setText("衛教室報到排隊");
+            if (_processType.equals("DEPT_SCHEDULE")) butCmd.setText("科室報到排隊");
+        } else {
+            butCmd.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private class MyWebViewClient extends WebViewClient {
         @Override
