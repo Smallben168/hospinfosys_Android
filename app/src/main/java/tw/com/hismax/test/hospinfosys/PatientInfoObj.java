@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,8 @@ public class PatientInfoObj extends Application {
         //ptName = "王小敏";
         //idNo = "A123456789";
         //birthDay = "0850506";
+        msgList = new ArrayList<MessageItem>();
+
     }
     public int getChartNo() {
         return chartNo;
