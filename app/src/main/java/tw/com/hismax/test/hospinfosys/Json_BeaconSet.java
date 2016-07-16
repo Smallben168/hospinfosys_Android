@@ -18,14 +18,13 @@ import java.io.IOException;
 
 
 public class Json_BeaconSet extends Thread {
-    String result = "";
+    private String result = "";
     int view_no = 0;
     private int curNo=0;
-    String doctor_name,clinic_ps = "";
-    String _status_doc, _status = "";
-    String location_code = "";
-    String doctor_no = "";
-    String exceptViewTime="";
+    private String _status_doc;
+    private String _status = "";
+    private String exceptViewTime="";
+
     JSONArray JArray = new JSONArray();
     JSONObject jsonObj = new JSONObject();
     String test = "";
@@ -102,5 +101,44 @@ public class Json_BeaconSet extends Thread {
     }
 
 
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public int getCurNo() {
+        return curNo;
+    }
+
+    public void setCurNo(int curNo) {
+        this.curNo = curNo;
+    }
+
+    public String get_status_doc() {
+        return _status_doc;
+    }
+
+    public void set_status_doc(String _status_doc) {
+        this._status_doc = _status_doc;
+    }
+
+    public String get_status() {
+        return _status;
+    }
+
+    public void set_status(String _status) {
+        this._status = _status;
+    }
+
+    public String getExceptViewTime() {
+        return exceptViewTime;
+    }
+
+    public void setExceptViewTime(String exceptViewTime) {
+        this.exceptViewTime = exceptViewTime;
+    }
 }
 

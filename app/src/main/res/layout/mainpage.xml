@@ -255,7 +255,8 @@
                 android:text="確定"
                 android:id="@+id/butCmd"
                 android:layout_alignBottom="@+id/but_menu"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                style="@android:style/Widget.Button" />
 
             <TextView
                 android:layout_width="wrap_content"

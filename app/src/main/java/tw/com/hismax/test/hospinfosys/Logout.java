@@ -52,7 +52,8 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     String result3;
     String clinic,  duplicate_no, prenatal_care;
     Json2 json2;                //***Ben : http://163.18.22.69/rest/getTodayReg/get?chart_no=" + chart_no.toString()
-    Json_BeaconGet beaconGet;   //***Ben : "http://163.18.22.69/rest/receiver_beacon/get?beacon_uuid
+    Json_BeaconGet beaconGet;   //***Ben : http://163.18.22.69/rest/receiver_beacon/get?beacon_uuid
+    Json_BeaconSet beaconSet;   //***Ben : http://163.18.22.69/rest/receiver_beacon/set
     Json3_check Json3_check;
     Handler mThreadHandler_get;
     HandlerThread mThread_get;
@@ -73,6 +74,8 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     String _pt_name;
     String _doctor_no,_doctor_name;
     String _httpResult;
+    String _json_BeaconGet_Result;
+    String _json_BeaconSet_Result;
     int _view_no;
     String _status_doc, _status;
     String _location_code;
@@ -82,6 +85,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
     String _doc1="", _doc2="", _doc3="", _doc4="", _doc5="", _doc6="";
     Boolean butCmdVisible = false;
     String _processType = "";
+    String _exceptionTime = "";
     //---------------------
     SimpleDateFormat formatter;
     Date curDate;
@@ -316,7 +320,9 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
         @Override
         public void onClick(View view) {
-
+            //***Ben : call Json_BeaconGet 由Beacon觸發 取得今日看診資料 -----------
+            Thread mThread = new Thread(setBeaconProcessRun);
+            mThread.start();
         }
     }
     public void SendIntent2() {
@@ -403,21 +409,24 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
         public void run() {
             beaconGet = new Json_BeaconGet(b_uuid, String.valueOf(_chart_no));
             if (beaconGet.isHaveData()) {
-                _httpResult = beaconGet.getjson2();
-
-                _view_no = beaconGet.getview_no();
-                _doctor_no = json2.getdoctor_no();
-                _doctor_name = json2.getdoctor_name();
-                _status_doc = json2.get_status_doc();
-                _location_code = json2.getlocation_code();
-                _status = json2.get_status();
-                _clinic_ps = json2.getclinic_ps();
-                _processType = json2.get_status_doc();
-                //------- Clinic Status ---- Bottom
-                _current_no = json2.getCurrentNo();
-                _doc1 = "目前看診至 : " +  _current_no;
-                _doc2 = "確定預約報到 ? ";
-                butCmdVisible = true;
+                _json_BeaconGet_Result = beaconGet.getResult();
+                if (_json_BeaconGet_Result.equals("\"\"")) {
+                    Log.d("BEN", "getRegRecordRun had Processed !! return 空字串.....");
+                } else {
+                    _view_no = beaconGet.getview_no();
+                    _doctor_no = json2.getdoctor_no();
+                    _doctor_name = json2.getdoctor_name();
+                    _status_doc = json2.get_status_doc();
+                    _location_code = json2.getlocation_code();
+                    _status = json2.get_status();
+                    _clinic_ps = json2.getclinic_ps();
+                    _processType = json2.get_status_doc();
+                    //------- Clinic Status ---- Bottom
+                    _current_no = json2.getCurrentNo();
+                    _doc1 = "目前看診至 : " + _current_no;
+                    _doc2 = "確定預約報到 ? ";
+                    butCmdVisible = true;
+                }
             } else {
                 _doctor_no = "";
                 _doctor_name = "";
@@ -465,6 +474,34 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
             butCmd.setVisibility(View.INVISIBLE);
         }
     }
+    public Runnable setBeaconProcessRun = new Runnable() {
+        public void run() {
+            beaconSet = new Json_BeaconSet(_json_BeaconGet_Result);
+            if (beaconGet.isHaveData()) {
+                _json_BeaconSet_Result = beaconSet.getResult();
+                if (_json_BeaconSet_Result.equals("\"\"")) {
+                    Log.d("BEN", "setBeaconProcessRun had Processed !! return 空字串.....");
+                } else {
+                    //------- Clinic Status ---- Bottom
+                    _exceptionTime = beaconSet.getExceptViewTime();
+                    _doc1 = "預計看診時間為 : " + _exceptionTime;
+                    _doc2 = "報到成功 !!";
+                    butCmdVisible = false;
+                }
+            } else {
+                _doctor_no = "";
+                _doctor_name = "";
+                _current_no = 0;
+                _clinic_ps = "";
+                _view_no = 0;
+                _doc1 = "沒有掛號資料 !!";
+                butCmdVisible = false;
+            }
+
+            //Ben***----- refresh screen -----
+            mUI_Handler.post(runnableShow2Screen);
+        }
+    };
 
     private class MyWebViewClient extends WebViewClient {
         @Override

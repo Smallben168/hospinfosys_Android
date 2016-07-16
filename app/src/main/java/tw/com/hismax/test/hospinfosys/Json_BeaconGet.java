@@ -17,7 +17,7 @@ import java.io.IOException;
 
 
 public class Json_BeaconGet extends Thread {
-    String result = "";
+    private String result = "";
     int view_no = 0;
     private int curNo=0;
     String doctor_name,clinic_ps = "";
@@ -63,8 +63,10 @@ public class Json_BeaconGet extends Thread {
             if (entity != null) {
                 this.result = EntityUtils.toString(entity);
                 Log.d("BEN", "Json_BeaconGet = " + result.toString());
-                if (result.equals("")) {
-                    haveData =false;
+                if (result.equals("\"\"")) {
+                    //有資料但己處理過
+                    haveData =true;
+
                 } else {
                     this._status = new JSONArray(this.result).getJSONObject(0).getString("_status");
                     Log.d("Ben", "json_BeaconGet status= " + this._status);
@@ -109,9 +111,6 @@ public class Json_BeaconGet extends Thread {
     }
 
     //回傳值到MainActivity
-    public String getjson2() {
-        return this.result;
-    }
 
     public String get_status_doc() {
         return this._status_doc;
@@ -149,12 +148,17 @@ public class Json_BeaconGet extends Thread {
         this.curNo = curNo;
     }
 
+    //**Ben:
     public boolean isHaveData() {
         return haveData;
     }
 
     public void setHaveData(boolean haveData) {
         this.haveData = haveData;
+    }
+
+    public String getResult() {
+        return result;
     }
 }
 
