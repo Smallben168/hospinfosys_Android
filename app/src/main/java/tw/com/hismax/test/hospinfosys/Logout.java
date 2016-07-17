@@ -217,7 +217,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
             //Ben***----- refresh screen -----
             // 當移除Beacon時清除畫面, 此段需觀察看看有無問題
             notFoundBeaconCount++;
-            if (notFoundBeaconCount > 2) {
+            if (notFoundBeaconCount > 1) {
                 _doc2 = "";
                 butCmdVisible = false;
                 mUI_Handler.post(runnableShow2Screen);
