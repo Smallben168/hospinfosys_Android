@@ -16,8 +16,10 @@
         android:layout_height="wrap_content"
         android:text="Time"
         android:id="@+id/textView_Time"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textIsSelectable="false"
+        android:textColor="@color/accent_material_light" />
 
     <TextView
         android:layout_width="fill_parent"
