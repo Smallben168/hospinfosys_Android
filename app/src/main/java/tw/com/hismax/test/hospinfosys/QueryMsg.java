@@ -29,6 +29,18 @@ public class QueryMsg extends AppCompatActivity {
 
         //***Ben --- 取出 patient 資料-------s
         patient = (PatientInfoObj)getApplicationContext();
+        //demo------
+        patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //----------
         msgList = patient.getMsgList();
 
         //_pt_name = patient.getPtName();
@@ -38,6 +50,7 @@ public class QueryMsg extends AppCompatActivity {
         login_home = (Button) findViewById(R.id.button_login);
         login_home.setOnClickListener(new ClickButton());
         lstMsg = (ListView) findViewById(R.id.listView_Msg);
+
 
         adapter = new LstAdapter(QueryMsg.this, msgList);
         lstMsg.setAdapter(adapter);

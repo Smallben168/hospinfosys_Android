@@ -5,7 +5,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
     android:weightSum="1"
-    android:background="#f39191">
+    android:background="@drawable/background_shape"
+    android:padding="10dp"
+    android:baselineAligned="false"
+    android:touchscreenBlocksFocus="true">
 
 
     <TextView
@@ -21,10 +24,10 @@
         android:layout_height="wrap_content"
         android:text="Message"
         android:id="@+id/textView_Message"
-        android:textSize="26sp"
+        android:textSize="18sp"
         android:maxLines="5"
-        android:layout_weight="0.66"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:padding="10sp" />
 </LinearLayout>
 
 
