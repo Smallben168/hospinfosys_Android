@@ -52,10 +52,9 @@ public class Menu extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            Toast.makeText(Menu.this, "onClick-"+view.getId(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Menu.this, "onClick-"+view.getId(), Toast.LENGTH_SHORT).show();
             switch (view.getId()) {
                 case R.id.button2: {
-                    Log.e("button2", "123546");
                     Toast.makeText(Menu.this, "主畫面", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent();
                     //it.setClass(Menu.this, MainActivity.class);
@@ -66,7 +65,6 @@ public class Menu extends AppCompatActivity {
                 }
                 case R.id.button3: {
                     Toast.makeText(Menu.this, "衛教清單", Toast.LENGTH_SHORT).show();
-                    Log.e("button3", "123546");
                     Intent it = new Intent();
                     it.setClass(Menu.this, Web_list.class);
                     startActivity(it);
@@ -90,8 +88,10 @@ public class Menu extends AppCompatActivity {
 
                 }
                 case R.id.button6: {
+                    Toast.makeText(Menu.this, "基本設定", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent();
                     it.setClass(Menu.this, MainActivity.class);
+                    it.putExtra("FROM", "MENU");
                     startActivity(it);
                     Menu.this.finish();
                     break;
@@ -99,6 +99,7 @@ public class Menu extends AppCompatActivity {
                 }
                 //***Ben : 會掛
                 case R.id.button7: {
+                    Toast.makeText(Menu.this, "醫院介紹", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent();
                     it.setClass(Menu.this, HospitalInfo.class);
                     startActivity(it);

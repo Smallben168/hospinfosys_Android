@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
     int _chart_no;
     String _regId;
     String _result;
+    String _fromMenu = "SELF";
     //-------------------
     String view_no, doctor_name, _status_doc, location_code, doctor_no;
     String b_uuid = "D5E9DBE2-D9F7-4564-A6C8-57A38C5FA6F0";
@@ -99,6 +100,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -106,14 +109,31 @@ public class MainActivity extends Activity {
         if (checkPlayServices()) {
             Log.d("BEN", "GCM 服務不可用");
         }
-
+        //***Ben: 檢查是否為來自 Menu.java
+        Log.d("BEN", "1. fromMenu=" + _fromMenu);
+        try {
+            Intent it = this.getIntent();
+            _fromMenu = it.getStringExtra("FROM");   //取不到時為 null
+        } catch (Exception e) {
+            _fromMenu = "";
+            Log.d("BEN", "Self Start....");
+        }
+        Log.d("BEN", "2. fromMenu=" + _fromMenu);
         findComponent();
 
         patient = (PatientInfoObj)getApplicationContext();
         if (patient.readShareData()) {
             //有資料
-            SendIntent();
-            return;
+            if (_fromMenu != null){
+                _chart_no = patient.getChartNo();
+                _pt_name = patient.getPtName();
+                _birth_date = patient.getBirthDay();
+                _id_no = patient.getIdNo();
+                moveToComponent();
+            } else {
+                SendIntent();
+                return;
+            }
         }
         //沒有資料, show this screen
         GetClientRegistrationId getClientRegistrationId = new GetClientRegistrationId(this);
@@ -127,10 +147,7 @@ public class MainActivity extends Activity {
         mUI_Handler = new Handler();
     }
 
-    public void ReadValue() {
-        setting = getSharedPreferences("LoginInfo", 0);
-        valuestring = setting.getString("VALUESTRING", "");
-    }
+
 
     public void SendIntent() {
         Intent it = new Intent();
@@ -190,12 +207,15 @@ public class MainActivity extends Activity {
 
     public Runnable runnableShow2Screen = new Runnable() {
         public void run() {
-            //txtDoctorName.setText(_doctor_name);
-            name.setText(_pt_name);
-            birth.setText(_birth_date);
-            chart.setText(String.valueOf( _chart_no));
+            moveToComponent();
         }
     };
+
+    private void moveToComponent(){
+        name.setText(_pt_name);
+        birth.setText(_birth_date);
+        chart.setText(String.valueOf( _chart_no));
+    }
 
     // Json2 呼叫事件  @@
 //    mThread_get=new HandlerThread("bb");

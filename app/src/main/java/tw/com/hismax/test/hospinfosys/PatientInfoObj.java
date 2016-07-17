@@ -24,8 +24,8 @@ public class PatientInfoObj extends Application {
     private String idNo = new String();
     private String birthDay = new String();
 
-    private File sdcard;
-    private File patientSetting;
+    //private File sdcard;
+    //private File patientSetting;
 
     private List<MessageItem> msgList;
 
@@ -73,7 +73,7 @@ public class PatientInfoObj extends Application {
     }
 
 
-
+/*
     public void readFileToObj(){
         //for test
         //deleteFile();
@@ -137,7 +137,7 @@ public class PatientInfoObj extends Application {
         return deleted;
     }
 
-
+*/
     public boolean isNotFirstRun() {
         return notFirstRun;
     }
