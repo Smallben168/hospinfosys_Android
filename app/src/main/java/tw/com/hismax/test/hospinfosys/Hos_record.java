@@ -51,7 +51,6 @@ public class Hos_record extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Log.d("BEN", "Click....");
             Intent it = new Intent();
             it.setClass(Hos_record.this, Logout.class);
             startActivity(it);

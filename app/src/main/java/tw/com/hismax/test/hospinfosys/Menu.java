@@ -75,13 +75,15 @@ public class Menu extends AppCompatActivity {
 
                 }
                 case R.id.button4: {
+                    Toast.makeText(Menu.this, "就醫記錄", Toast.LENGTH_SHORT).show();
                     SendIntent2();
                     break;
 
                 }
                 case R.id.button5: {
+                    Toast.makeText(Menu.this, "訊息查詢", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent();
-                    it.setClass(Menu.this, Web_list.class);
+                    it.setClass(Menu.this, QueryMsg.class);
                     startActivity(it);
                     Menu.this.finish();
                     break;

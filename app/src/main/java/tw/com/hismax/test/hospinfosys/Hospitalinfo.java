@@ -25,7 +25,6 @@ public class HospitalInfo extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Log.d("BEN", "Click....");
             Intent it = new Intent();
             it.setClass(HospitalInfo.this, Logout.class);
             startActivity(it);
