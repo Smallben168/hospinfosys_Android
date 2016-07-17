@@ -30,16 +30,20 @@ public class MainActivity extends Activity {
     Button login, login_home,menu;
     String valuestring = null;
     String getRegistrationId = null;
-    String A;
+
     Handler mThreadHandler_post;
     HandlerThread mThread_post;
     Handler mThreadHandler_get;
     HandlerThread mThread_get;
     Json1 json1;
     Json2 json2;
-    String result, result2;
-    String birth_date, pt_name;
-    int chart_no;
+    String result2;
+    //***Ben ------------
+    String _birth_date, _pt_name, _id_no;
+    int _chart_no;
+    String _regId;
+    String _result;
+    //-------------------
     String view_no, doctor_name, _status_doc, location_code, doctor_no;
     String b_uuid = "D5E9DBE2-D9F7-4564-A6C8-57A38C5FA6F0";
     private Handler mUI_Handler;
@@ -50,36 +54,24 @@ public class MainActivity extends Activity {
     private TextView editRegisterId;
     //private EditText editRegisterId;
     //private EditText editSenderId;
-    private Runnable r2 = new Runnable() {
+
+    private Runnable registerDeviceRun = new Runnable() {
 
         public void run() {
-            MainActivity.this.result = json1.getString();
-            //Toast.makeText(MainActivity.this, json1.getString(), Toast.LENGTH_SHORT).show();
-            MainActivity.this.chart_no = json1.getchart_no();
-            MainActivity.this.birth_date = json1.getbirth_date();
-            MainActivity.this.pt_name = json1.getpt_name();
-//            MainActivity.this.doctor_no = json1.getdoctor_no();
-            Log.e("chart_no2134586", Integer.toString (chart_no));
-            //Toast.makeText(MainActivity.this, birth_date, Toast.LENGTH_SHORT).show();
-
-//            mThreadHandler_get.post(g1);
-
-            name.setText(json1.getpt_name());
-            birth.setText(json1.getbirth_date());
-            chart.setText(Integer.toString(json1.getchart_no()));
-            //Ben ------
-            patient.setIdNo(value.getText().toString());
-            patient.setChartNo(json1.getchart_no());
-            patient.setPtName(json1.getpt_name());
-            patient.setBirthDay(json1.getbirth_date());
-            patient.saveToFile();
-        }
-    };
-    private Runnable r1 = new Runnable() {
-
-        public void run() {
-            json1 = new Json1(valuestring.toString(), getRegistrationId.toString());
-            mUI_Handler.post(r2);
+            json1 = new Json1(_id_no, _regId);
+            MainActivity.this._result  = json1.getString();
+            MainActivity.this._chart_no = json1.getchart_no();
+            MainActivity.this._birth_date = json1.getbirth_date();
+            MainActivity.this._pt_name = json1.getpt_name();
+            //Ben ------ Move to Object
+            MainActivity.this.patient.setIdNo(value.getText().toString());
+            MainActivity.this.patient.setChartNo(json1.getchart_no());
+            MainActivity.this.patient.setPtName(json1.getpt_name());
+            MainActivity.this.patient.setBirthDay(json1.getbirth_date());
+            //patient.saveToFile();
+            MainActivity.this.patient.writeShareData();
+            //---- Refresh ------
+            mUI_Handler.post(runnableShow2Screen);
         }
 
     };
@@ -88,95 +80,51 @@ public class MainActivity extends Activity {
     PatientInfoObj patient;
     //---------------E
 
-    private void initProc() {
+    private void findComponent() {
+        gcm_id = (TextView) findViewById(R.id.editRegisterId);
+        name = (TextView) findViewById(R.id.textView15);
+        birth = (TextView) findViewById(R.id.textView19);
+        chart = (TextView) findViewById(R.id.textView20);
+
         editRegisterId = (TextView) findViewById(R.id.editRegisterId);
         //ditRegisterId = (EditText)findViewById(R.id.editRegisterId);
         //editSenderId = (EditText)findViewById(R.id.editSenderId);
 
+        value = (EditText) findViewById(R.id.id_no);
+        login_home = (Button) findViewById(R.id.button_login);
+        login = (Button) findViewById(R.id.button);
+        login_home.setOnClickListener(new ClickButton());
+        login.setOnClickListener(new ClickButton());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //Log.d("BEN", savedInstanceState.toString());
-        patient = (PatientInfoObj)getApplicationContext();
-        patient.readFileToObj();
-        if (patient.isNotFirstRun()) {
 
-        } else {
-            if (patient.getIdNo() != null) {
-                patient.setNotFirstRun(true);
-                SendIntent();
-                return;
-            }
-        }
-        //} else {
-        //    Log.d("BEN", "aaaa");
-        //}
-
-
-//        Intent intent = new Intent(MainActivity.this,UIMain.class);
-//        startService(intent);
-
-        initProc();
-        mUI_Handler = new Handler();
-        GetClientRegistrationId getClientRegistrationId = new GetClientRegistrationId(this);
-        getClientRegistrationId.openGCM();
-        Log.i("regid = ", getClientRegistrationId.getRegistrationId());
-        //Ben取得
-        // APA91bEJOQznACdSjOLAE2oGaPiaBAq2GZ59MK6UWaDWZWI8H0SIlw3amuVQpnuRgqoXugtklgbVlDCFNOEBunmUxqv6SLC8VGkgBDZOBO4f80EUc205UpH8Qhyl56snEdJaKN_443Ge
-        editRegisterId.setText(getClientRegistrationId.getRegistrationId());
-        //editSenderId.setText("99262725025");
-        //gcm_id = (EditText) findViewById(R.id.editRegisterId);
-        gcm_id = (TextView) findViewById(R.id.editRegisterId);
-        name = (TextView) findViewById(R.id.textView15);
-        birth = (TextView) findViewById(R.id.textView19);
-        chart = (TextView) findViewById(R.id.textView20);
-
-
-        value = (EditText) findViewById(R.id.id_no);
-        login_home = (Button) findViewById(R.id.button_login);
-        login = (Button) findViewById(R.id.button);
-
-        login_home.setOnClickListener(new ClickButton());
-        login.setOnClickListener(new ClickButton());
-        //Ben
-        //file = new File("/data/data/tw.com.hismax.test.hospinfosys/shared_prefs", "LoginInfo.xml");
-
-
-//        if(value == null){
-//            Toast.makeText(MainActivity.this, "請輸入您的身分證", Toast.LENGTH_SHORT).show();
-//        }else{
-
-        //if (file.exists()) {
-        //    ReadValue();
-        //    //Toast.makeText(MainActivity.this, "ReadValue", Toast.LENGTH_SHORT).show();
-        //    Log.i("login", "檔案存在");
-        //}
-
-        //}
-
-//
-//        if (file.exists()) {
-//            ReadValue();
-//            Toast.makeText(MainActivity.this, "ReadValue", Toast.LENGTH_SHORT).show();
-//            //file.delete();
-//            //Toast.makeText(MainActivity.this, "delete", Toast.LENGTH_SHORT).show();
-//
-//
-//
-//            if (!valuestring.equals("")) {
-//                //SendIntent();
-//                //Toast.makeText(MainActivity.this, "SendIntent", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-
-        //openDB();
         //***Ben: 檢查 GCM 服務是否可用----
         if (checkPlayServices()) {
             Log.d("BEN", "GCM 服務不可用");
         }
+
+        findComponent();
+
+        patient = (PatientInfoObj)getApplicationContext();
+        if (patient.readShareData()) {
+            //有資料
+            SendIntent();
+            return;
+        }
+        //沒有資料, show this screen
+        GetClientRegistrationId getClientRegistrationId = new GetClientRegistrationId(this);
+        getClientRegistrationId.openGCM();
+        _regId = getClientRegistrationId.getRegistrationId();
+        Log.i("regid = ", _regId);
+        //Ben取得
+        // APA91bEJOQznACdSjOLAE2oGaPiaBAq2GZ59MK6UWaDWZWI8H0SIlw3amuVQpnuRgqoXugtklgbVlDCFNOEBunmUxqv6SLC8VGkgBDZOBO4f80EUc205UpH8Qhyl56snEdJaKN_443Ge
+        editRegisterId.setText(_regId);
+
+        mUI_Handler = new Handler();
     }
 
     public void ReadValue() {
@@ -187,99 +135,27 @@ public class MainActivity extends Activity {
     public void SendIntent() {
         Intent it = new Intent();
         it.setClass(MainActivity.this, Logout.class);
-        Log.d("bundle", "result="+this.result);
-        //Ben
-        //Bundle bundle = new Bundle();
-        //bundle.putString("VALUE", valuestring);
-        //bundle.putString("GCM_String", getRegistrationId);
-        //bundle.putString("result", this.result);
-        //bundle.putString("chart_no", this.chart_no);
-        //bundle.putString("pt_name", this.pt_name);
-//        bundle.putString("doctor_no", this.doctor_no);
-
-//        bundle.putString("view_no", this.view_no);
-//        bundle.putString("doctor_name", this.doctor_name);
-//        bundle.putString("_status_doc", this._status_doc);
-//        bundle.putString("location_code", this.location_code);
-//        bundle.putString("doctor_no", this.doctor_no);
-//        bundle.putString("b_uuid", this.b_uuid);
-        //Ben it.putExtras(bundle);
         startActivity(it);
         MainActivity.this.finish();
-        //Log.e("chart_no", chart_no.toString());
-        //Log.e("pt_name", pt_name.toString());
     }
 
     class ClickButton implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
-            Log.i("login", value.getEditableText().toString() + "123546");
-//            if (value.getText().toString().equals("")) {
-//                Toast.makeText(MainActivity.this, "請輸入您的身分證字號", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Log.i("login", value.getEditableText().toString() + "我進來了");
-//                if (view == login) {
-//                    Log.i("login", "not null");
-//                    A = value.getEditableText().toString();
-//                    Log.e("A123", A.toString());
-//
-//                    valuestring = value.getEditableText().toString();
-//                    setting = getSharedPreferences("LoginInfo", 0);
-//                    setting.edit().putString("VALUESTRING", valuestring).commit();
-//
-//                    getRegistrationId = gcm_id.getText().toString();
-//                    //getRegistrationId = gcm_id.getEditableText().toString();
-//                    //setting.edit().putString("GCM_String",getRegistrationId).commit();
-//
-//                    mThread_post = new HandlerThread("aa");
-//
-//                    mThread_post.start();
-//
-//                    mThreadHandler_post = new Handler(mThread_post.getLooper());
-//
-//                    mThreadHandler_post.post(r1);
-//
-////                    //Json2 呼叫事件  @@
-////                    mThread_get = new HandlerThread("bb");
-////                    mThread_get.start();
-////                    mThreadHandler_get = new Handler(mThread_get.getLooper());
-//
-//
-//                    //SQLite
-//                    //add(chart_no.toString(), getRegistrationId.toString(), valuestring.toString(),birth_date.toString());
-//                    //openDialog("test", "1");
-//
-//                }
-//            }
-
-
             switch (view.getId()) {
                 case R.id.button: {
                     if (value.getText().toString().equals("")) {
                         Toast.makeText(MainActivity.this, "請輸入您的身分證字號", Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.i("login", value.getEditableText().toString() + "我進來了");
+                        Log.d("Ben", "ID_NO="+ value.getEditableText().toString());
                         if (view == login) {
-                            Log.i("login", "not null");
-                            A = value.getEditableText().toString();
-                            Log.e("A123", A.toString());
+                            _id_no      = value.getEditableText().toString();
 
-                            valuestring = value.getEditableText().toString();
-                            setting = getSharedPreferences("LoginInfo", 0);
-                            setting.edit().putString("VALUESTRING", valuestring).commit();
+                            //***Ben : call Json1 註冊病患手機id -----------
+                            Thread mThread = new Thread(registerDeviceRun);
+                            mThread.start();
 
-                            getRegistrationId = gcm_id.getText().toString();
-                            //getRegistrationId = gcm_id.getEditableText().toString();
-                            //setting.edit().putString("GCM_String",getRegistrationId).commit();
-
-                            mThread_post = new HandlerThread("aa");
-
-                            mThread_post.start();
-
-                            mThreadHandler_post = new Handler(mThread_post.getLooper());
-
-                            mThreadHandler_post.post(r1);
                         }
                     }
                     break;
@@ -311,6 +187,15 @@ public class MainActivity extends Activity {
         }
         return true;
     }
+
+    public Runnable runnableShow2Screen = new Runnable() {
+        public void run() {
+            //txtDoctorName.setText(_doctor_name);
+            name.setText(_pt_name);
+            birth.setText(_birth_date);
+            chart.setText(String.valueOf( _chart_no));
+        }
+    };
 
     // Json2 呼叫事件  @@
 //    mThread_get=new HandlerThread("bb");

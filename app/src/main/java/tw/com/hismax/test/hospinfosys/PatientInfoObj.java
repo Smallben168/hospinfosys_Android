@@ -1,6 +1,7 @@
 package tw.com.hismax.test.hospinfosys;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
@@ -18,10 +19,10 @@ import java.util.List;
  */
 public class PatientInfoObj extends Application {
     private boolean notFirstRun;
-    private int chartNo;
-    private String ptName;
-    private String idNo;
-    private String birthDay;
+    private int chartNo = 0 ;
+    private String ptName = new String();
+    private String idNo = new String();
+    private String birthDay = new String();
 
     private File sdcard;
     private File patientSetting;
@@ -29,13 +30,15 @@ public class PatientInfoObj extends Application {
     private List<MessageItem> msgList;
 
     public PatientInfoObj(){
-        sdcard = new File(Environment.getExternalStorageDirectory(),"Android/data/tw.com.hismax.test.hospinfosys/files");
-        patientSetting = new File(sdcard,"PatientSetting.txt");
+        //--sdcard = new File(Environment.getExternalStorageDirectory(),"Android/data/tw.com.hismax.test.hospinfosys/files");
+        //--patientSetting = new File(sdcard,"PatientSetting.txt");
+
         //Move init value
         //chartNo = 106733;
         //ptName = "王小敏";
         //idNo = "A123456789";
         //birthDay = "0850506";
+
         msgList = new ArrayList<MessageItem>();
 
     }
@@ -59,9 +62,7 @@ public class PatientInfoObj extends Application {
         return idNo;
     }
 
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
+    public void setIdNo(String idNo) { this.idNo = idNo; }
 
     public String getBirthDay() {
         return birthDay;
@@ -70,6 +71,8 @@ public class PatientInfoObj extends Application {
     public void setBirthDay(String birthDay) {
         this.birthDay = birthDay;
     }
+
+
 
     public void readFileToObj(){
         //for test
@@ -142,7 +145,7 @@ public class PatientInfoObj extends Application {
     public void setNotFirstRun(boolean notFirstRun) {
         this.notFirstRun = notFirstRun;
     }
-
+    //***Ben : for Message Buffer ---
     public List<MessageItem> getMsgList() {
         return msgList;
     }
@@ -153,5 +156,29 @@ public class PatientInfoObj extends Application {
     //***Ben : Clear Message
     public void clrMsgList(){
         msgList.clear();
+    }
+    //***Ben : Read SharedPreferences
+    public boolean readShareData(){
+        SharedPreferences patientDat = getSharedPreferences("PatientObj", MODE_PRIVATE);
+        chartNo = patientDat.getInt("CHART_NO", 0);
+        if (chartNo > 0) {
+            ptName = patientDat.getString("PT_NAME"," ");
+            birthDay = patientDat.getString("BIRTHDAY"," ");
+            idNo = patientDat.getString("ID_NO"," ");
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //***Ben : 必需先用 setXXX 設定值
+    public boolean writeShareData(){
+        SharedPreferences patientDat = getSharedPreferences("PatientObj", MODE_PRIVATE);
+        patientDat.edit()
+                .putInt("CHART_NO", chartNo)
+                .putString("PT_NAME", ptName)
+                .putString("BIRTHDAY", birthDay)
+                .putString("ID_NO", idNo)
+                .commit();
+        return true;
     }
 }
