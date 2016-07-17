@@ -30,8 +30,8 @@ public class QueryMsg extends AppCompatActivity {
         //***Ben --- 取出 patient 資料-------s
         patient = (PatientInfoObj)getApplicationContext();
         //demo------
-        patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
-        patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
+        //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
         //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
         //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
         //patient.addMsgList(new MessageItem("2016/07/17 08:30:00","這是測試訊息這是測試訊息這是測試訊息這是測試訊息這是測試訊息"));
