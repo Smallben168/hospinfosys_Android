@@ -12,8 +12,7 @@
         android:textSize="30sp"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/editRegisterId"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="50dp" />
+        android:layout_gravity="bottom|right" />
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

@@ -55,15 +55,16 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
                                 .getString("message"), "hospinfosys", false,
                         PendingIntent.getActivity(context, 0, i,
                                 PendingIntent.FLAG_CANCEL_CURRENT));
+                //Ben*** : 保留訊息 ---------------------------s
+                Log.d("BEN", "GCM訊息:"+ extras.getString("message"));
+                //***Ben --- 取出 patient 資料-------s
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                String currentDateandTime = sdf.format(new Date());
+                patient = (PatientInfoObj) context.getApplicationContext();
+                patient.addMsgList(new MessageItem(currentDateandTime, extras.getString("message")));
+                //---------------------------------------------e
             }
-            //Ben*** : 保留訊息 ---------------------------s
-            Log.d("BEN", "GCM訊息:"+ extras.getString("message"));
-            //***Ben --- 取出 patient 資料-------s
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            String currentDateandTime = sdf.format(new Date());
-            patient = (PatientInfoObj) context.getApplicationContext();
-            patient.addMsgList(new MessageItem(currentDateandTime, extras.getString("message")));
-            //---------------------------------------------e
+
         }
         setResultCode(Activity.RESULT_OK);
     }

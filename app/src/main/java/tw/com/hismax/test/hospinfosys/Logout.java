@@ -401,7 +401,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 _clinic_ps = json2.getclinic_ps();
                 //------- Clinic Status ---- Bottom
                 _current_no = json2.getCurrentNo();
-                _doc1 = "目前看診至 : " +  _current_no;
+                _doc1 = "目前診間看診至 : " +  _current_no + " 號";
             } else {
                 _doctor_no = "";
                 _doctor_name = "";
@@ -434,8 +434,8 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                     _processType = json2.get_status_doc();
                     //------- Clinic Status ---- Bottom
                     _current_no = json2.getCurrentNo();
-                    _doc1 = "目前看診至 : " + _current_no;
-                    _doc2 = "確定預約報到 ? ";
+                    _doc1 = "目前診間看診至 : " + _current_no + " 號";
+                    _doc2 = "是否確定做預約報到 ? ";
                     butCmdVisible = true;
                 }
             } else {
@@ -496,7 +496,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                     //------- Clinic Status ---- Bottom
                     _exceptionTime = beaconSet.getExceptViewTime();
                     _doc1 = "預計看診時間為 : " + _exceptionTime;
-                    _doc2 = "報到成功 !!";
+                    _doc2 = "預約報到成功 !!";
                     butCmdVisible = false;
                 }
             } else {
