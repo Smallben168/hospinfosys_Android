@@ -219,6 +219,10 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
             notFoundBeaconCount++;
             if (notFoundBeaconCount > 1) {
                 _doc2 = "";
+                _doc3 = "";
+                _doc4 = "";
+                _doc5 = "";
+                _doc6 = "";
                 butCmdVisible = false;
                 mUI_Handler.post(runnableShow2Screen);
             }
@@ -497,6 +501,7 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                     _exceptionTime = beaconSet.getExceptViewTime();
                     _doc1 = "預計看診時間為 : " + _exceptionTime;
                     _doc2 = "預約報到成功 !!";
+                    _doc3 = "請您先至衛教室檢查 !!";
                     butCmdVisible = false;
                 }
             } else {
@@ -506,6 +511,11 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 _clinic_ps = "";
                 _view_no = 0;
                 _doc1 = "沒有掛號資料 !!";
+                _doc2 = "";
+                _doc3 = "";
+                _doc4 = "";
+                _doc5 = "";
+                _doc6 = "";
                 butCmdVisible = false;
             }
 
