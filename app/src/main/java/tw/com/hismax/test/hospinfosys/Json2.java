@@ -50,7 +50,8 @@ public class Json2 extends Thread {
             HttpClient client = new DefaultHttpClient(); // for port 80 requests!
             //Log.i("b_uuid.toString()", b_uuid.toString());
             Log.i("chart_no.toString()", chart_no.toString());
-            HttpGet httpget = new HttpGet("http://163.18.22.69/rest/getTodayReg/get?chart_no=" + chart_no);
+            //HttpGet httpget = new HttpGet("http://163.18.22.69/rest/getTodayReg/get?chart_no=" + chart_no);
+            HttpGet httpget = new HttpGet("http://61.219.152.220/rest/getTodayReg/get?chart_no=" + chart_no);
             //httpget.setEntity(se);
 
             HttpResponse response = client.execute(httpget);

@@ -27,7 +27,8 @@ public class Web_list extends AppCompatActivity {
         myWebView.getSettings().setJavaScriptEnabled(true);
         myWebView.requestFocus();
         myWebView.setWebViewClient(new MyWebViewClient());
-        myWebView.loadUrl("http://163.18.22.69/geteducation/");
+        //myWebView.loadUrl("http://163.18.22.69/geteducation/");
+        myWebView.loadUrl("http://61.219.152.220/geteducation/");
 
         login_home = (Button) findViewById(R.id.button_login);
         login_home.setOnClickListener(new ClickButton());

@@ -37,7 +37,8 @@ public class Hos_record extends AppCompatActivity {
         myWebView.getSettings().setJavaScriptEnabled(true);
         myWebView.requestFocus();
         myWebView.setWebViewClient(new MyWebViewClient());
-        myWebView.loadUrl("http://163.18.22.69/procpatient/getlist?chart_no="+ chart_no);
+        //myWebView.loadUrl("http://163.18.22.69/procpatient/getlist?chart_no="+ chart_no);
+        myWebView.loadUrl("http://61.219.152.220/procpatient/getlist?chart_no="+ chart_no);
     }
 
 

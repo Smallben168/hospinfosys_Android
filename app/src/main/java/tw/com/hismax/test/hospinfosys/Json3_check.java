@@ -33,7 +33,8 @@ public class Json3_check extends Thread {
             StringEntity se = new StringEntity(JArray.toString());
 
             client = new DefaultHttpClient();
-            HttpPost httpost = new HttpPost("http://163.18.22.69/rest/receiver_beacon/set");
+            //HttpPost httpost = new HttpPost("http://163.18.22.69/rest/receiver_beacon/set");
+            HttpPost httpost = new HttpPost("http://61.219.152.220/rest/receiver_beacon/set");
             httpost.setEntity(se);
 
             httpost.setHeader("Accept", "application/json");

@@ -73,7 +73,8 @@ public class Json1 extends Thread {
             Log.e("你弄的JsonArray", JArray.toString());  //你弄出的JSonArray轉成字串
 
             client = new DefaultHttpClient();
-            HttpPost httpost = new HttpPost("http://163.18.22.69/rest/device_register/");
+            //HttpPost httpost = new HttpPost("http://163.18.22.69/rest/device_register/");
+            HttpPost httpost = new HttpPost("http://61.219.152.220/rest/device_register/");
             httpost.setEntity(se);
 
             httpost.setHeader("Accept", "application/json");

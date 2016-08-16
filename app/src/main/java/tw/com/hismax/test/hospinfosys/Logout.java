@@ -128,6 +128,17 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
 
         butCmd =  (Button) findViewById(R.id.butCmd);
 
+        Button butHelp = (Button) findViewById(R.id.but_help);
+        butHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent();
+                it.setClass(Logout.this, VoiceActivity.class);
+                startActivity(it);
+                //Logout.this.finish();
+            }
+        });
+
         //*** Ben --- set Value to 元件 -----
         txtPtName.setText(_pt_name);
         DisplayDocArea();
@@ -467,7 +478,8 @@ public class Logout extends Activity implements iBeaconScanManager.OniBeaconScan
                 myWebView.getSettings().setJavaScriptEnabled(true);
                 myWebView.requestFocus();
                 myWebView.setWebViewClient(new MyWebViewClient());
-                myWebView.loadUrl("http://163.18.22.69/static/doctor_images/" + String.valueOf(_doctor_no) + ".jpeg");
+                //myWebView.loadUrl("http://163.18.22.69/static/doctor_images/" + String.valueOf(_doctor_no) + ".jpeg");
+                myWebView.loadUrl("http://61.219.152.220/static/doctor_images/" + String.valueOf(_doctor_no) + ".jpeg");
             }
             DisplayDocArea();
         }

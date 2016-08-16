@@ -50,7 +50,8 @@ public class Json_BeaconSet extends Thread {
 
             HttpClient client = new DefaultHttpClient(); // for port 80 requests!
             Log.d("BEN", "input data=" + inpData);
-            url = "http://163.18.22.69/rest/receiver_beacon/set";
+            //url = "http://163.18.22.69/rest/receiver_beacon/set";
+            url = "http://61.219.152.220/rest/receiver_beacon/set";
             Log.d("BEN", "url = " + url);
             HttpPost httpost = new HttpPost(url);
             StringEntity se = new StringEntity(inpData);

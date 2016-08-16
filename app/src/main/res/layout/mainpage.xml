@@ -238,7 +238,14 @@
                 android:id="@+id/but_menu"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true" />
-
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text=""
+                android:background="@drawable/icon_help"
+                android:id="@+id/but_help"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"  />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -257,10 +264,10 @@
                 style="@android:style/Widget.Button"
                 android:background="#f6cdcd"
                 android:textStyle="bold"
-                android:layout_alignBottom="@+id/but_menu"
                 android:singleLine="false"
                 android:textSize="20sp"
-                android:layout_alignParentStart="true" />
+                android:layout_alignBottom="@+id/but_menu"
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:layout_width="wrap_content"

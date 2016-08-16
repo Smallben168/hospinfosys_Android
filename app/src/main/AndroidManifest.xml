@@ -72,7 +72,8 @@
         <activity android:name=".Web_list" />
         <activity android:name=".Menu" />
         <activity android:name=".Hos_record" />
-        <activity android:name=".QueryMsg"></activity>
+        <activity android:name=".QueryMsg" />
+        <activity android:name=".VoiceActivity"></activity>
     </application>
 
 </manifest>
